@@ -8,8 +8,8 @@ function App() {
     <div>
       <Header />
       <TicketForm />
-      <TicketPreview />
-      <DownloadButton />
+      {/* <TicketPreview />
+      <DownloadButton /> */}
     </div>
   );
 }
