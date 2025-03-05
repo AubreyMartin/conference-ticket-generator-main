@@ -1,8 +1,14 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useNavigate } from "react-router-dom";
 
 const TicketForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [github, setGithub] = useState("");
+
+  const navigate = useNavigate();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFile(acceptedFiles[0]); // Store the first uploaded file
@@ -10,20 +16,26 @@ const TicketForm: React.FC = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const fileURL = file ? URL.createObjectURL(file) : null; // Convert to URL
+
+    navigate("/ticket", {
+      state: { name, email, github, fileURL },
+    });
+  };
+
   return (
     <div className="ticketform">
-      {/* Title box */}
       <div className="titlebox">
-        <div>
-          <h1>Your Journey to Coding Conf 2025 Starts Here!</h1>
-        </div>
+        <h1>Your Journey to Coding Conf 2025 Starts Here!</h1>
       </div>
       <div className="subject">
         <p>Secure your spot at next year’s biggest coding conference.</p>
       </div>
 
-      {/* Form box */}
-      <form className="formbox">
+      <form className="formbox" onSubmit={handleSubmit}>
         {/* Dropzone for Avatar Upload */}
         <div className="upload-container">
           <label>Upload Avatar</label>
@@ -32,7 +44,7 @@ const TicketForm: React.FC = () => {
             <img
               src="src/assets/images/icon-upload.svg"
               className="dropzone-icon"
-            />{" "}
+            />
             {isDragActive ? (
               <p>Drop the image here...</p>
             ) : (
@@ -40,23 +52,26 @@ const TicketForm: React.FC = () => {
             )}
             {file && <p>Selected file: {file.name}</p>}
           </div>
-          <p className="info">
-            <img src="src/assets/images/icon-info.svg" className="into-icon" />{" "}
-            Upload your photo (JPG or PNG, max size: 500KB).
-          </p>
         </div>
 
         <div>
           <label htmlFor="fullname">Full Name</label>
-          <input type="text" id="fullname" className="Fullname" />
+          <input
+            type="text"
+            id="fullname"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
         </div>
         <div>
           <label htmlFor="email">Email Address</label>
           <input
             type="email"
             id="email"
-            className="EmailAddress"
-            placeholder="example@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -64,17 +79,15 @@ const TicketForm: React.FC = () => {
           <input
             type="text"
             id="github"
-            className="GitHubUsername"
-            placeholder="@yourusername"
+            value={github}
+            onChange={(e) => setGithub(e.target.value)}
           />
         </div>
 
         <div className="generatebutton">
-          <button>Generate My Ticket</button>
+          <button type="submit">Generate My Ticket</button>
         </div>
       </form>
-
-      {/* Generate Button */}
     </div>
   );
 };
