@@ -7,6 +7,10 @@ body {
   margin: 0;
   padding: 20px;
   background-image: url("../assets/images/background-desktop.png");
+  background-repeat: no-repeat;
+  background-position: center top; /* Ensures it's centered */
+  background-size: contain; /* Adjust based on your need */
+
   color: rgb(247, 245, 245);
   display: flex;
   flex-direction: column;
@@ -15,48 +19,44 @@ body {
   max-height: 1100px;
   max-width: 1440px;
   position: relative;
+  padding-bottom: 50px;
+  padding-top: 30px;
 }
 .formbox label {
   font-size: 20px; /* Increase font size */
 }
 
 /* Background Elements */
-body::before {
-  content: "";
+.background-patterns {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
-  width: 50%;
-  height: 50%;
-  background: url("../assets/images/pattern-squiggly-line-bottom-desktop.svg")
-    no-repeat left bottom / contain;
-  z-index: 1;
-}
-
-body::after {
-  content: "";
-  position: absolute;
-  top: 60%;
-  right: 20%;
-  transform: translateY(-50%);
-  width: 217px;
-  height: 217px;
-  background: url("../assets/images/pattern-circle.svg") no-repeat right center /
-    contain;
-  z-index: 2;
-}
-
-.top-right-line {
-  position: absolute;
-  top: 20%;
-  right: 0;
-  width: 446px;
-  height: 208px;
+  width: 100%;
+  height: 100%;
   background: url("../assets/images/pattern-squiggly-line-top.svg") no-repeat
-    right top / contain;
+      right top / 446px 208px,
+    url("../assets/images/pattern-circle.svg") no-repeat top 70% right 30% /
+      217px 217px,
+    url("../assets/images/pattern-squiggly-line-bottom-desktop.svg") no-repeat
+      left bottom / 50% 50%;
   z-index: 1999;
 }
+/* Responsive Styles */
 
+/* Mobile-specific bottom pattern */
+.mobile-bottom-pattern {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  background: url("../assets/images/pattern-squiggly-line-bottom-mobile-tablet.svg")
+    no-repeat right bottom / contain;
+  z-index: 1999;
+  display: none; /* Hidden by default */
+}
+
+/* Lines Overlay (Always on top) */
 .overlay-lines {
   position: absolute;
   top: 0;
@@ -64,30 +64,20 @@ body::after {
   width: 100%;
   height: 100%;
   background: url("../assets/images/pattern-lines.svg") no-repeat center / cover;
-  z-index: 1000;
+  z-index: 2000; /* Ensures it overlays everything */
 }
-
-/* Responsive Styles */
-@media (max-width: 1024px) {
-  body {
-    background-image: url("../assets/images/background-tablet.png");
+/* Show mobile bottom pattern only on smaller screens */
+@media (max-width: 768px) {
+  .background-patterns {
+    background: url("../assets/images/pattern-squiggly-line-top.svg") no-repeat
+        right top / contain,
+      url("../assets/images/pattern-circle.svg") no-repeat right 20% center /
+        contain;
   }
-  body::before {
-    background-image: url("../assets/images/pattern-squiggly-line-bottom-mobile-tablet.svg");
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  body {
-    background-image: url("../assets/images/background-mobile.png");
-  }
-  body::before {
-    background-image: url("../assets/images/pattern-squiggly-line-bottom-mobile-tablet.svg");
-    width: 20%;
+  .mobile-bottom-pattern {
+    display: block; /* Show only on mobile */
   }
 }
-
 /* Layout Components */
 header {
   display: flex;
